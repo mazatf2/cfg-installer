@@ -38,31 +38,19 @@ const openTagInBrowser = (tag: string) => {
 
 const ensureCustomFolder = (tfFolder: string) => {
 	return new Promise((resolve, reject) => {
-		try {
-			const timeout = setTimeout(() => {
-				console.error('ensureCustomFolder timeout')
-				reject('fs hang')
-			}, 2000)
 
-			console.log(path.join(tfFolder, 'custom'))
-			const a = mkdir(path.join(tfFolder, 'custom'), (err) => {
-				console.log('mkdir', err)
-				if (err?.errno !== os.constants.errno.EEXIST) {
-					clearTimeout(timeout)
-					resolve(true)
-				} else {
-					clearTimeout(timeout)
-					reject(err)
-				}
-				clearTimeout(timeout)
+		console.log(path.join(tfFolder, 'custom'))
+		const a = mkdir(path.join(tfFolder, 'custom'), (err) => {
+			console.log('mkdir', err)
+
+			if (err?.errno !== os.constants.errno.EEXIST) {
 				resolve(true)
-			})
-			console.log(a)
-		} catch (e) {
-			console.log(e)
-			reject(e)
-		}
+			} else {
+				reject(err)
+			}
 
+			resolve(true)
+		})
 	})
 }
 
@@ -153,10 +141,6 @@ const exist = (tf2Path: string) => {
 const backupFile = (filePath: string) => {
 	return new Promise((resolve, reject) => {
 
-		const id = setTimeout(() => {
-			//reject('backupFile fs hang')
-		}, 4_000)
-
 		const target = path.parse(filePath)
 		const isElectron = typeof shell !== 'undefined'
 
@@ -175,12 +159,10 @@ const backupFile = (filePath: string) => {
 
 		copyFile(filePath, backupLocation, err => {
 			if (err) {
-				clearTimeout(id)
 				reject(err)
 			}
 			console.log('copyfile cb')
 
-			clearTimeout(id)
 			resolve(true)
 		})
 	})
@@ -189,17 +171,12 @@ const backupFile = (filePath: string) => {
 const removeFile = (file: string) => {
 	return new Promise((resolve, reject) => {
 
-		const id = setTimeout(() => {
-			//reject('removeFile fs hang')
-		}, 2000)
-
 		unlink(file, err => {
 			if (err) {
-				clearTimeout(id)
 				reject(err)
 			}
 			console.log('removeFile cb')
-			clearTimeout(id)
+
 			resolve(true)
 		})
 	})
@@ -231,19 +208,11 @@ const handleFileInstall = (urlTarget: string, fileDest: string, newFileName: str
 		const file = await response.arrayBuffer()
 		if(!file) return reject(file)
 
-
-		const id = setTimeout(() => {
-			//return reject('handleFileInstall: writeFile fs hang')
-
-		}, 10_000)
-
 		const backup = await backupFile(backupFilePath).catch(err => {
-			clearTimeout(id)
 			return reject(err)
 		})
 
 		if (!backup) {
-			clearTimeout(id)
 			return reject('backup err')
 		}
 
@@ -252,12 +221,11 @@ const handleFileInstall = (urlTarget: string, fileDest: string, newFileName: str
 		const buffer = Buffer.from(file)
 		writeFile(newFileDest, buffer, {flag: 'w'}, err => {
 			if (err) {
-				clearTimeout(id)
 				console.log(err)
 				return reject(removeFile(newFileDest))
 			}
 			console.log('writeFile cb')
-			clearTimeout(id)
+
 			resolve(true)
 		})
 	})
