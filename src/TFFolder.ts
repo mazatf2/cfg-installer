@@ -1,4 +1,4 @@
-import {nodejs_hook} from './preload'
+import {nodejs_hook} from './nodejs_preload'
 
 export const TFFolder = (hook: nodejs_hook, path: string) => {
 	return new Promise(async (resolve, reject) => {

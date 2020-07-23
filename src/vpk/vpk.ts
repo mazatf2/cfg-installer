@@ -1,6 +1,6 @@
 // budget version
 
-import {filesystemItem} from '../preload'
+import {filesystemItem} from '../nodejs_preload'
 
 export const vpk = (i: filesystemItem) => {
 

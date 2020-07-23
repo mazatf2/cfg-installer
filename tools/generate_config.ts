@@ -1,6 +1,6 @@
 import {presets_display_order} from '../src/configResources'
 import semver from 'semver/preload'
-import {filesystemItem} from '../src/preload'
+import {filesystemItem} from 'nodejs_preload.ts'
 
 //extracted from, removed [] from: type x = {...}[]
 //import {ReposListReleaseAssetsResponseData} from '@octokit/types'
