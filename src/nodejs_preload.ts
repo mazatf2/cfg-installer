@@ -215,10 +215,18 @@ const handleFileInstall = (urlTarget: string, fileDest: string, newFileName: str
 		if (!backup) {
 			return reject('backup err')
 		}
-
 		console.log('backup', backup)
 
+		// clean user installed files when overwrite is not enough. etc 'file (2).vpk'
+		if(oldFileName !== newFileName){
+			await removeFile(backupFilePath).catch(err => {
+				return reject(err)
+			})
+		}
+
 		const buffer = Buffer.from(file)
+
+		// write over
 		writeFile(newFileDest, buffer, {flag: 'w'}, err => {
 			if (err) {
 				console.log(err)
