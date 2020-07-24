@@ -1,4 +1,4 @@
-import {presets_display_order} from '../src/configResources'
+import {presets_display_order} from '../configResources'
 import semver from 'semver/preload'
 import {filesystemItem} from 'nodejs_preload.ts'
 
@@ -39,18 +39,18 @@ export type ghReleaseAsset = {
 	};
 }
 
-type assetType = 'preset' | 'addon' | 'template'
+export type assetType = 'preset' | 'addon' | 'template'
 
 export interface customFolderResource {
 	fileName: string, // autoexec_template.cfg, mastercomfig-medium-preset.vpk
 	//label: string,
 	//name: string,
 	//download_url: string,
-	assetType: string | assetType
+	assetType: string | assetType //todo rename to resourceType
 	version: string | 'unknown'
 
-	path: string
-	name: string
+	path: string // filesystem / gh download url
+	name: string // is value set to quality or addon or template
 
 	quality: string // medium-high
 	addon: string // lowmem
@@ -219,7 +219,7 @@ export const mapTemplates = (asset: resource): customFolderResource[] => {
 		.sort((a, b) => a.name - b.name)
 }
 
-export const toCustomFolderResources = (i: resource): customFolderResource[] => {
+export const CustomFolderResources = (i: resource): customFolderResource[] => {
 	return [...mapPresets(i), ...mapAddons(i), ...mapTemplates(i)]
 }
 

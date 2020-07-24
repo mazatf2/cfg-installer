@@ -7,7 +7,7 @@ import {Item} from './pages/FolderView/FolderView'
 import {vpk} from './vpk/vpk'
 import {shell} from 'electron'
 import {sanitizeUrl} from '@braintree/sanitize-url'
-import {toCustomFolderResources} from '../tools/generate_config'
+import {CustomFolderResources} from './CustomFolderResources/CustomFolderResources'
 import {Buffer} from 'buffer'
 import {fetchGithub} from './github/github'
 
@@ -122,7 +122,7 @@ const exist = (tf2Path: string) => {
 			.map(i => vpk(i))
 		//.map(i => {return {...i, buffer: null}})
 
-		const filesystemResources = toCustomFolderResources(thingsOfInterest)
+		const filesystemResources = CustomFolderResources(thingsOfInterest)
 		console.log('fileList')
 
 		resolve({

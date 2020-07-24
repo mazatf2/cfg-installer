@@ -1,5 +1,5 @@
 import {compare, valid} from 'semver'
-import {assetType, customFolderResource} from '../../tools/generate_config'
+import {assetType, customFolderResource} from '../CustomFolderResources/CustomFolderResources'
 
 export type inspectionObj = {
 	inspection: string

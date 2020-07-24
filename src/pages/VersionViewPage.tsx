@@ -17,7 +17,7 @@ import {
 import {ReposListReleasesResponseData} from '@octokit/types'
 import {format} from 'timeago.js'
 import {presets} from '../configResources'
-import {ghReleaseAsset, mapAddons, mapPresets} from '../../tools/generate_config'
+import {ghReleaseAsset, mapAddons, mapPresets} from '../CustomFolderResources/CustomFolderResources'
 import {presets_desc_en, presets_en, recommended_addons, recommended_preset} from '../data/temp'
 //const { presets_desc_en, presets_en, recommended_addons, recommended_preset} = require('./src/data/temp.ts')
 

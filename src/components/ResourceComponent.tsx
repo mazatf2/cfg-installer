@@ -6,7 +6,7 @@ import {ReposListReleasesResponseData} from '@octokit/types'
 import {Link} from './Link'
 import { useRouteMatch } from 'react-router-dom'
 import {resources} from '../configResources'
-import {customFolderResource} from '../../tools/generate_config'
+import {customFolderResource} from '../CustomFolderResources/CustomFolderResources'
 import { userAction } from '../App'
 
 interface Props {

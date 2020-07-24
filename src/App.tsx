@@ -8,7 +8,7 @@ import {TFFolder} from './TFFolder'
 import {DirectoryTree} from 'directory-tree'
 import {itemTree} from './pages/FolderView/FolderView'
 import {inspectionObj, Inspections} from './inspections/inspections'
-import {customFolderResource, toCustomFolderResources} from '../tools/generate_config'
+import {customFolderResource, CustomFolderResources} from './CustomFolderResources/CustomFolderResources'
 
 export type tf2FolderPath = string
 export type dirTree = DirectoryTree | null
@@ -50,13 +50,13 @@ class App extends Component<Props, State> {
 			warnings: [],
 			githubReleases: [],
 			//selectedGithubRelease: [],
-			electron_tf2FolderPath: '', // path/to/Team Fortress 2/x/y
-			nodejs_tf2FolderPath: '', // path/to/Team Fortress 2
+			electron_tf2FolderPath: '', // user input: path/to/Team Fortress 2/x/y
+			nodejs_tf2FolderPath: '', // validated: path/to/Team Fortress 2
 			customFolderItemTree: null,
 			inspections: [],
 
-			customFolderResources: null, // from toCustomFolderResources(filesystem)
-			ghResources: null, // from toCustomFolderResources(gh api)
+			customFolderResources: null, // from CustomFolderResources(filesystem)
+			ghResources: null, // from CustomFolderResources(gh api release.assets). think release assets as tf/custom folder files. but they are just on internet
 
 		}
 	}
@@ -71,7 +71,7 @@ class App extends Component<Props, State> {
 			const data = res.data ?? []
 			this.setState({
 				githubReleases: data,
-				ghResources: toCustomFolderResources(data[0].assets),
+				ghResources: CustomFolderResources(data[0].assets),
 			})
 			console.log(this.state)
 			console.log('github releases api', data)
