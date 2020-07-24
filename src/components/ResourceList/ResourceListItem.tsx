@@ -23,10 +23,10 @@ export const ResourceListItem = (props: Props) => {
 	const resource = props.resource
 	const inspections = props.inspections
 
+	const latestVersion = inspections.find(i => i.inspection === 'latest_version').version
+
 	const ourInspections = inspections.filter(i => i.path === resource.path)
 	const showUpdate = ourInspections.some(i => i.inspection === 'no_old_versions')
-	const latestVersion = props.ghResources[0].version
-
 	const ourInspectionNames = ourInspections.map(i => i.inspection)
 
 	const humanName = resourceMapping[resource.name]?.name_human ?? resource.fileName

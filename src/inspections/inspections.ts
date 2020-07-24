@@ -53,6 +53,11 @@ export const Inspections = (customFolderResources: customFolderResource[] | null
 
 	}
 
+	inspections.push({
+		inspection: 'latest_version',
+		version: ghResources[0].version,
+	})
+
 	console.log(inspections)
 
 	return inspections
