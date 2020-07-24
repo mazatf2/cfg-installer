@@ -1,0 +1,3 @@
+[submodule "third_party/mastercomfig.github.io"]
+	path = third_party/mastercomfig.github.io
+	url = https://github.com/mastercomfig/mastercomfig.github.io.git
