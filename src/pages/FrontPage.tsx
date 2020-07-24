@@ -1,25 +1,21 @@
 import React, {Component} from 'react'
-import {Button, FileInput, Text, List, ListSubheader, ListItem} from 'react-md'
-import {tf2FolderPath, dirTree, userAction} from '../App'
+import {FileInput, ListSubheader, Text} from 'react-md'
+import {tf2FolderPath, userAction} from '../App'
 import {FolderViewPage} from './FolderViewPage'
 import {itemTree} from './FolderView/FolderView'
 import {customFolderResource} from '../CustomFolderResources/CustomFolderResources'
 import {inspectionObj} from '../inspections/inspections'
-import {ResourceAvatar} from '../components/ResourceAvatar'
-import {ResourceComponent} from '../components/ResourceComponent'
-import {ReposListReleasesResponseData} from '@octokit/types'
+import {ResourceList} from '../components/ResourceList/ResourceList'
 
 interface Props {
 	tf2FolderPath: tf2FolderPath
 	onPathSelect: (e: tf2FolderPath) => void
 	customFolderItemTree: itemTree | null
 	inspections: inspectionObj[]
-	githubReleases: ReposListReleasesResponseData | []
+	userAction: userAction
 
 	customFolderResources: customFolderResource[] | null
 	ghResources: customFolderResource[] | null
-
-	userAction: userAction
 }
 
 export class FrontPage extends Component<Props> {
@@ -55,14 +51,15 @@ export class FrontPage extends Component<Props> {
 			return <div>no filesystem assets</div>
 		}
 
-		if(!this.props.ghResources) {
+		if (!this.props.ghResources) {
 			return <div>no gh resources</div>
 		}
 
 		const customFolder = this.props.customFolderResources
+		const ghResources = this.props.ghResources
 
-
-		//filter installed
+		// TODO possible inspection: 'available resources to install'
+		// filter installed
 		const availableResources = this.props.ghResources
 			.filter(i => !customFolder.some(a => a.name === i.name))
 
@@ -73,39 +70,25 @@ export class FrontPage extends Component<Props> {
 
 		return (
 			<div>
-				<List>
-					<ListSubheader>Installed</ListSubheader>
+				<ResourceList
+					subHeader={<ListSubheader>Installed</ListSubheader>}
+					inspections={inspections}
+					userAction={this.props.userAction}
 
-					{customFolder.map(i => {
-							return (
-								<ResourceComponent
-									resource={i}
-									inspections={inspections}
-									key={i.path}
-									ghResources={this.props.ghResources}
-									userAction={this.props.userAction}
-								/>
-							)
-						},
-					)}
-					<ListSubheader>Available</ListSubheader>
-					{
-						availableResources.map(i => {
-							return (
-								<ResourceComponent
-									resource={i}
-									inspections={inspections}
-									key={i.path}
-									ghResources={this.props.githubReleases}
-								/>
-							)
-						})
-					}
-				</List>
+					resources={customFolder}
+					ghResources={ghResources}
+				/>
+				<ResourceList
+					subHeader={<ListSubheader>Avaible</ListSubheader>}
+					inspections={inspections}
+					userAction={this.props.userAction}
+
+					resources={availableResources}
+					ghResources={ghResources}
+				/>
 				<Text>....</Text>
 				DEBUG: emulate folder view page
 				<FolderViewPage
-					tf2FolderPath={this.props.tf2FolderPath}
 					customFolderItemTree={this.props.customFolderItemTree}
 				/>
 			</div>

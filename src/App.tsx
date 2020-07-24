@@ -8,7 +8,7 @@ import {TFFolder} from './TFFolder'
 import {DirectoryTree} from 'directory-tree'
 import {itemTree} from './pages/FolderView/FolderView'
 import {inspectionObj, Inspections} from './inspections/inspections'
-import {customFolderResource, CustomFolderResources} from './CustomFolderResources/CustomFolderResources'
+import {customFolderResource, CustomFolderResources,} from './CustomFolderResources/CustomFolderResources'
 
 export type tf2FolderPath = string
 export type dirTree = DirectoryTree | null
@@ -55,8 +55,11 @@ class App extends Component<Props, State> {
 			customFolderItemTree: null,
 			inspections: [],
 
-			customFolderResources: null, // from CustomFolderResources(filesystem)
-			ghResources: null, // from CustomFolderResources(gh api release.assets). think release assets as tf/custom folder files. but they are just on internet
+			// from CustomFolderResources(filesystem)
+			customFolderResources: null,
+			// from CustomFolderResources(gh api release.assets). think ghRelease.assets as tf/custom folder files. but they are just on internet
+			// could be called: customFolderResourcesInternet
+			ghResources: null,
 
 		}
 	}
@@ -91,7 +94,6 @@ class App extends Component<Props, State> {
 
 		if (action === 'update') {
 			ev = ev as updateAction
-
 
 			const oldFile = ev.target
 			const name = ev.target.name
@@ -141,7 +143,6 @@ class App extends Component<Props, State> {
 					tf2FolderPath={this.state.electron_tf2FolderPath}
 					onPathSelect={e => this.setState({electron_tf2FolderPath: e})}
 					customFolderItemTree={this.state.customFolderItemTree}
-					githubReleases={this.state.githubReleases}
 					inspections={this.state.inspections}
 					customFolderResources={this.state.customFolderResources}
 					ghResources={this.state.ghResources}
