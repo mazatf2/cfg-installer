@@ -85,6 +85,12 @@ export const Inspections = (customFolderResources: customFolderResource[] | null
 
 	console.log(inspections)
 
+	// computed .map, .filter etc. transforms
+	// make inspections data-driven as possible for 'pure' ui (render data only, no transforms)
+	const output = {
+		latest_version: inspections.find(i => i.inspection === 'latest_version'),
+	}
+
 	return inspections
 }
 
