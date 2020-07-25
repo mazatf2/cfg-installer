@@ -1,10 +1,34 @@
 import {compare, valid} from 'semver'
 import {assetType, customFolderResource} from '../CustomFolderResources/CustomFolderResources'
 
+type inspectionType = 'error' | 'notice-signal'
+
+// tabular data
 export type inspectionObj = {
-	inspection: string
-	path: string
-	assetType: assetType
+	inspection:     string
+	type:           inspectionType
+	path:           string 		| null
+	assetType:      assetType 	| null
+	version:        string 		| null
+}
+
+type inspectionObjBase = {
+	inspection:     string
+	type:           inspectionType
+	path?:          string 		| null
+	assetType?:     assetType 	| null
+	version?:       string 		| null
+}
+
+const newIspection = (merge: inspectionObjBase): inspectionObj => {
+	return {
+		...{
+			path: null,
+			assetType: null,
+			version: null,
+		},
+		...merge,
+	}
 }
 
 export const Inspections = (customFolderResources: customFolderResource[] | null, ghResources: customFolderResource[] | null): inspectionObj[] => {
@@ -53,10 +77,11 @@ export const Inspections = (customFolderResources: customFolderResource[] | null
 
 	}
 
-	inspections.push({
+	inspections.push(newIspection({
 		inspection: 'latest_version',
+		type: 'notice-signal',
 		version: ghResources[0].version,
-	})
+	}))
 
 	console.log(inspections)
 
@@ -76,11 +101,12 @@ const no_old_versions = (i: customFolderResource, ghResources: customFolderResou
 		if (isOursOld === 1) {
 			console.log('old')
 
-			return {
+			return newIspection({
 				inspection: 'no_old_versions',
+				type: 'error',
 				path: i.path,
 				assetType: i.assetType,
-			} as inspectionObj
+			})
 		}
 	}
 
@@ -91,11 +117,12 @@ const no_old_versions = (i: customFolderResource, ghResources: customFolderResou
 const no_multiple_different_quality_presets = (i: customFolderResource) => {
 	if (i.assetType !== 'preset') throw 'wrong resource type'
 
-	return {
+	return newIspection({
 		inspection: 'no_multiple_different_quality_presets',
+		type: 'error',
 		path: i.path,
 		assetType: i.assetType,
-	} as inspectionObj
+	})
 }
 
 // e.g: no more than 1 preset installed. low, high
@@ -108,11 +135,12 @@ const no_multiple_same_resources = (i: customFolderResource, all: customFolderRe
 		.length
 
 	if (duplicates > 1) {
-		return {
+		return newIspection({
 			inspection: 'no_multiple_same_resources',
+			type: 'error',
 			path: i.path,
 			assetType: i.assetType,
-		} as inspectionObj
+		})
 	}
 
 	return null
@@ -139,11 +167,12 @@ const can_mark_as_active_preset = (i: customFolderResource, inspections: inspect
 const mark_as_active_preset = (i: customFolderResource) => {
 	if (i.assetType !== 'preset') throw 'wrong resource type'
 
-	return {
+	return newIspection({
 		inspection: 'active_preset',
+		type: 'notice-signal',
 		path: i.path,
 		assetType: i.assetType,
-	} as inspectionObj
+	})
 }
 
 const no_autoexec_loops = (i: any) => {
